@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroCare AI - Smart Stroke Prevention</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0/dist/chartjs-plugin-datalabels.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">NeuroCare AI</div>
+            <nav>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#prediction-dashboard">Dashboard</a></li>
+                    <li><a href="#visualization-section">Insights</a></li>
+                    <li><a href="#chatbot-section">Chatbot</a></li>
+                    <li><a href="#planners-section">Planners</a></li>
+                    <li><a href="#future-scope">Future</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="hero fade-in">
+            <div class="container">
+                <h2>Empowering Early Detection. Saving Lives. Enhancing Accessibility.</h2>
+                <p class="hero-description">NeuroCare AI is a smart stroke risk prediction and alert system, designed to provide early warnings and empower individuals with preventive health insights. We aim to bridge healthcare divides and promote well-being through responsible AI.</p>
+                <div class="cta-buttons">
+                    <a href="#prediction-dashboard" class="btn btn-primary">Get Your Risk Prediction</a>
+                    <a href="#future-scope" class="btn btn-secondary">Explore Our Vision</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="prediction-dashboard" class="dashboard-section section-animate">
+            <div class="container">
+                <h2>Stroke Risk Prediction Dashboard</h2>
+                <p class="section-description">Enter the patient's details to get a personalized stroke risk prediction. Our AI model provides an immediate assessment.</p>
+                <form id="predictionForm">
+                    <div class="form-group">
+                        <label for="gender">Gender:</label>
+                        <select id="gender" name="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age:</label>
+                        <input type="number" id="age" name="age" min="0" max="120" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hypertension">Hypertension:</label>
+                        <select id="hypertension" name="hypertension" required>
+                            <option value="">Select</option>
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="heart_disease">Heart Disease:</label>
+                        <select id="heart_disease" name="heart_disease" required>
+                            <option value="">Select</option>
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ever_married">Ever Married:</label>
+                        <select id="ever_married" name="ever_married" required>
+                            <option value="">Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="work_type">Work Type:</label>
+                        <select id="work_type" name="work_type" required>
+                            <option value="">Select Work Type</option>
+                            <option value="Private">Private</option>
+                            <option value="Self-employed">Self-employed</option>
+                            <option value="Govt_job">Government Job</option>
+                            <option value="children">Children</option>
+                            <option value="Never_worked">Never Worked</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Residence_type">Residence Type:</label>
+                        <select id="Residence_type" name="Residence_type" required>
+                            <option value="">Select Residence Type</option>
+                            <option value="Urban">Urban</option>
+                            <option value="Rural">Rural</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="avg_glucose_level">Average Glucose Level:</label>
+                        <input type="number" id="avg_glucose_level" name="avg_glucose_level" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bmi">BMI:</label>
+                        <input type="number" id="bmi" name="bmi" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="smoking_status">Smoking Status:</label>
+                        <select id="smoking_status" name="smoking_status" required>
+                            <option value="">Select Smoking Status</option>
+                            <option value="formerly smoked">Formerly Smoked</option>
+                            <option value="never smoked">Never Smoked</option>
+                            <option value="smokes">Smokes</option>
+                            <option value="Unknown">Unknown</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="button-animate">Predict Stroke Risk</button>
+                </form>
+                <div id="predictionResult" class="result-box"></div>
+                <div id="alertMessage" class="alert-box"></div>
+            </div>
+        </section>
+
+        <section id="visualization-section" class="visualization-section section-animate">
+            <div class="container">
+                <h2>Project & Dataset Insights</h2>
+                <p class="section-description">Explore key demographic and health factor distributions from our healthcare dataset. Understanding these patterns helps in stroke prevention awareness.</p>
+
+                <div class="chart-grid">
+                    <div class="chart-card">
+                        <h3>Stroke Prevalence by Age Group</h3>
+                        <canvas id="ageStrokeChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>BMI Distribution</h3>
+                        <canvas id="bmiDistributionChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Hypertension & Heart Disease Impact</h3>
+                        <canvas id="healthConditionChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Smoking Status vs. Stroke</h3>
+                        <canvas id="smokingStrokeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="chatbot-section" class="chatbot-section section-animate">
+            <div class="container">
+                <h2>AI Health Chatbot</h2>
+                <p class="section-description">Ask me anything about any queires on heart stroke</p>
+                <div class="chat-container">
+                    <div id="chatMessages" class="chat-messages">
+                        <div class="message bot-message">Hello! How can I help you today regarding stroke prevention </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="chatInput" placeholder="Type your message...">
+                        <button id="sendMessage" class="button-animate">Send</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="planners-section" class="planners-section section-animate">
+            <div class="container">
+                <h2>AI-Based Health Planners</h2>
+                <p class="section-description">Get personalized recommendations for diet, exercise, and medical considerations. These are general guidelines; always consult a professional for personalized advice.</p>
+
+                <div class="planner-grid">
+                    <div class="planner-card">
+                        <h3>Food Diet Planner</h3>
+                        <textarea id="foodPlannerInput" placeholder="Describe your dietary preferences, allergies, or health goals for food recommendations..."></textarea>
+                        <button onclick="getPlannerRecommendation('food', document.getElementById('foodPlannerInput').value)" class="button-animate">Get Food Plan</button>
+                        <div id="foodPlannerResult" class="planner-result"></div>
+                    </div>
+
+                    <div class="planner-card">
+                        <h3>Exercise Planner</h3>
+                        <textarea id="exercisePlannerInput" placeholder="Describe your current fitness level, available equipment, or exercise preferences..."></textarea>
+                        <button onclick="getPlannerRecommendation('exercise', document.getElementById('exercisePlannerInput').value)" class="button-animate">Get Exercise Plan</button>
+                        <div id="exercisePlannerResult" class="planner-result"></div>
+                    </div>
+
+                    <div class="planner-card">
+                        <h3>Medical Planner/Considerations</h3>
+                        <textarea id="medicalPlannerInput" placeholder="Describe any specific health concerns, medications (general info only, not for diagnosis), or general health questions for medical considerations..."></textarea>
+                        <button onclick="getPlannerRecommendation('medical', document.getElementById('medicalPlannerInput').value)" class="button-animate">Get Medical Considerations</button>
+                        <div id="medicalPlannerResult" class="planner-result"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="future-scope" class="future-scope-section section-animate">
+            <div class="container">
+                <h2>Future Vision & Development Roadmap</h2>
+                <p class="section-description">NeuroCare AI is more than a prototype; it's a foundation for a comprehensive, preventive, and privacy-aware health ecosystem. Our roadmap includes:</p>
+                <div class="future-cards-grid">
+                    <div class="future-card">
+                        <div class="icon-placeholder"></div>
+                        <h3>Wearable Integration</h3>
+                        <p>Seamlessly connect with Fitbit, Apple HealthKit, and Mi Band for real-time vital monitoring and continuous insights.</p>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: 70%;" data-label="70% Completed"></div>
+                        </div>
+                    </div>
+                    <div class="future-card">
+                        <div class="icon-placeholder"></div>
+                        <h3>IoT Anomaly Detection</h3>
+                        <p>Proactive identification of unusual health patterns from connected devices, enabling early intervention.</p>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: 50%;" data-label="50% Completed"></div>
+                        </div>
+                    </div>
+                    <div class="future-card">
+                        <div class="icon-placeholder"></div>
+                        <h3>Federated Learning</h3>
+                        <p>Enhancing privacy by training models on decentralized user data, improving accuracy without compromising data ownership.</p>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: 30%;" data-label="30% Completed"></div>
+                        </div>
+                    </div>
+                    <div class="future-card">
+                        <div class="icon-placeholder"></div>
+                        <h3>Multilingual Voice UI</h3>
+                        <p>Making healthcare accessible to diverse rural populations through intuitive, voice-activated interfaces.</p>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: 40%;" data-label="40% Completed"></div>
+                        </div>
+                    </div>
+                     <div class="future-card">
+                        <div class="icon-placeholder"></div>
+                        <h3>Advanced XAI</h3>
+                        <p>Deeper Explainable AI with interactive SHAP visualizations for enhanced clinician and user trust.</p>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: 60%;" data-label="60% Completed"></div>
+                        </div>
+                    </div>
+                    <div class="future-card">
+                        <div class="icon-placeholder"></div>
+                        <h3>Gamification & Community</h3>
+                        <p>Engaging users with health goals through rewards, challenges, and peer support networks.</p>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: 25%;" data-label="25% Completed"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 NeuroCare AI. All rights reserved.</p>
+            <p class="disclaimer">Disclaimer: This is a prototype for educational and demonstration purposes only. It is not intended for medical diagnosis or treatment. Always consult a qualified healthcare professional for any medical concerns.</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
